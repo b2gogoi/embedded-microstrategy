@@ -18,8 +18,8 @@ const theme = createMuiTheme({
       contrastText: '#FFED94'
     },
     secondary: {
-      main: '#E7E7E7',
-      contrastText: '#1C365A'
+      main: '#FFED94',
+      contrastText: '#000'
     },
   },
   typography: {
@@ -54,6 +54,11 @@ const theme = createMuiTheme({
         justifyContent: 'space-between'
       }
     },
+    MuiCheckbox: {
+      root: {
+        color: '#FFED94'
+      }
+    },
     MuiDialog: {
       paper: {
         borderRadius: 22,
@@ -85,8 +90,72 @@ function App() {
   const classes = useStyles(theme);
 
   const filters = [
-    {name: 'Genre'},
-    {name: 'Listener Country'}
+    {
+      name: 'Genre',
+      selectMultiple: true,
+      items: [
+        {
+          name: 'Alternative',
+          selected: false
+        },
+        {
+          name: 'Brazilian',
+          selected: false
+        },
+        {
+          name: 'Blues',
+          selected: false
+        },
+        {
+          name: 'German Pop',
+          selected: false
+        }
+      ]
+    },
+    {
+      name: 'Listener Country',
+      selectMultiple: true,
+      items: [
+        {
+          name: 'India',
+          selected: false
+        },
+        {
+          name: 'Japan',
+          selected: false
+        },
+        {
+          name: 'Brazil',
+          selected: false
+        },
+        {
+          name: 'France',
+          selected: false
+        }
+      ]
+    },
+    {
+      name: 'Distributor',
+      selectMultiple: true,
+      items: [
+        {
+          name: 'Record Union',
+          selected: false
+        },
+        {
+          name: 'CD Baby',
+          selected: false
+        },
+        {
+          name: 'Ditto',
+          selected: false
+        },
+        {
+          name: 'Finetunes',
+          selected: false
+        }
+      ]
+    },
   ];
   return (
     <MuiThemeProvider theme={theme}>
