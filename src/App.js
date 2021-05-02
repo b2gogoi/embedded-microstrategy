@@ -3,6 +3,7 @@ import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {
   AppBar,
+  Avatar,
   IconButton,
   Tabs, Tab,
   Toolbar
@@ -47,6 +48,11 @@ const theme = createMuiTheme({
         padding: '16px 0 10px 0',
       }
     },
+    MuiToolbar: {
+      root: {
+        justifyContent: 'space-between'
+      }
+    },
     MuiDialog: {
       paper: {
         borderRadius: 22,
@@ -63,15 +69,19 @@ const theme = createMuiTheme({
   },
 });
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   imageIcon: {
     height: 42,
-    cursor: 'pointer',
+  },
+  avatarIcon: {
+    color: '#FFED94',
+    backgroundColor: '#000',
+    border: '4px solid #FFED94'
   },
 }));
 
 function App() {
-  const classes = useStyles();
+  const classes = useStyles(theme);
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
@@ -82,7 +92,12 @@ function App() {
               <img className={classes.imageIcon} src="/universal-music-group-logo.png" alt="logo" />   
             </div>
             <div>
-            UMG
+            <h1>Embedded Dossier</h1>
+            </div>
+            <div>
+                <Avatar className={classes.avatarIcon} variant="circular">
+                    BG
+                </Avatar>
             </div>
         </Toolbar>
           
