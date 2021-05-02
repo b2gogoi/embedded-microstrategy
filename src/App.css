@@ -72,6 +72,17 @@
   color: #fff;
 }
 
+.clearLink {
+  padding-left: 30px;
+  margin-bottom: .5rem;
+  color: #FFED94;
+  text-decoration: underline;
+  font-style: italic;
+  font-weight: 300;
+  font-size: small;
+  cursor: pointer;
+}
+
 .dropdown-item-checkbox > label {
   position: relative;
   /* padding-left: 2.5em; */
