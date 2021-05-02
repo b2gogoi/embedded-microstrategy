@@ -8,6 +8,7 @@ import {
   Tabs, Tab,
   Toolbar
 } from '@material-ui/core';
+import FilterHeaders from './components/filterHeaders';
 
 // Create your Own theme:
 const theme = createMuiTheme({
@@ -45,7 +46,7 @@ const theme = createMuiTheme({
       positionFixed: {
         minHeight: 62,
         border: '1px solid salmon',
-        padding: '16px 0 10px 0',
+        padding: '5px 0',
       }
     },
     MuiToolbar: {
@@ -82,6 +83,11 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles(theme);
+
+  const filters = [
+    {name: 'Genre'},
+    {name: 'Listener Country'}
+  ];
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
@@ -101,7 +107,24 @@ function App() {
             </div>
         </Toolbar>
           
-        </AppBar>UMG
+        </AppBar>
+        <div className="App-body">
+          <div className="centered"> 
+            <div className="filter box">
+                
+              <div className="attributes-container box">
+                <div className="selected-attributes box">selected-attributes</div>
+                <div className="actions box">Actions</div>
+              </div>
+              <div className="filter-headers box">
+                <FilterHeaders filters={filters} />
+              </div>
+            </div>
+            <div className="dossier box">
+                dossier box
+            </div>
+          </div>
+        </div>
       </div>
     </MuiThemeProvider>
     
