@@ -6,7 +6,7 @@ import {
   AppBar,
   Avatar,
   Chip,
-  IconButton,
+  Button,
   Tabs, Tab,
   Toolbar
 } from '@material-ui/core';
@@ -23,6 +23,10 @@ const theme = createMuiTheme({
       main: '#FFED94',
       contrastText: '#000'
     },
+    warning: {
+      main: '#9a0036',
+      contrastText: '#fff'
+    }
   },
   typography: {
     fontFamily: [
@@ -65,17 +69,24 @@ const theme = createMuiTheme({
         margin: 4,
       }
     },
-    MuiDialog: {
-      paper: {
-        borderRadius: 22,
-      },
-    },
-    MuiOutlinedInput: {
+    MuiButton: {
       root: {
-        borderRadius: 12,
+        minWidth: 100,
+        textTransform: 'none',
+        padding: '4px 0px',
+        fontSize: '1em',
+        margin: '4px',
+        color: '#000',
+        backgroundColor: '#FFED94'
       },
-      adornedStart: {
-        borderRadius: 22,
+      containedSecondary: {
+        color: '#fff',
+        backgroundColor: '#9a0036'
+      }
+    },
+    PrivateSwitchBase: {
+      root: {
+        padding: 4
       }
     }
   },
@@ -83,7 +94,7 @@ const theme = createMuiTheme({
 
 const useStyles = makeStyles((theme) => ({
   imageIcon: {
-    height: 42,
+    height: 110,
   },
   avatarIcon: {
     color: '#FFED94',
@@ -209,14 +220,16 @@ function App() {
   const [selected, setSelected] = useState([]);
   const [token, setToken] = useState();
   const [filters, setFilters] = useState([]);
-  
+  const [embDossier, setEmbDossier] = useState();
+
   const update = (modified) => {
-    console.log(modified);
+    // console.log(modified);
 
     let temp = [];
     for (const key in modified) {
       const sel = modified[key].filterDetail.items.filter(item => item.selected).map(item => ({
         name: item.name,
+        value: item.value,
         key
       }));
 
@@ -229,7 +242,71 @@ function App() {
   const handleDelete = (data) => {
     console.log('handleDelete');
     console.log(data);
+    const clone = filters;
 
+    for (const f of clone) {
+      if (f.filterKey === data.key) {
+        for (const item of f.filterDetail.items) {
+          if (item.name === data.name) {
+            item.selected = false;
+            break;
+          }
+        }
+      }
+    }
+    setFilters(clone);
+
+    let cloneSelections = selected;
+
+    const index = cloneSelections.findIndex(s => s.name === data.name);
+    console.log('remove at index ', index);
+    if (-1 !== index) {
+      console.log(cloneSelections.length);
+      cloneSelections.splice(index, 1);
+      console.log(cloneSelections.length);
+      setSelected(cloneSelections);
+    }
+  }
+
+  const applyFilters = (e) => {
+    console.log('Applying filters', selected);
+
+    const filterKeyMap = selected.reduce((acc, selection) => {
+      if(acc[selection.key]) {
+        acc[selection.key].push(selection);
+      } else {
+        acc[selection.key] = [selection];
+      }
+      return acc;
+    }, {});
+
+    // console.log(filterKeyMap);
+
+    for (const filterKey of Object.keys(filterKeyMap)) {
+      const filterDataObj = {};
+      const filterInfoObj = { key: filterKey};
+      const selectionsObj = filterKeyMap[filterKey].map(selection => ({ value: selection.value}));
+      filterDataObj.selections = selectionsObj;
+      filterDataObj.filterInfo = filterInfoObj;
+      filterDataObj.holdSubmit = true;
+      console.log(filterDataObj);
+      embDossier.filterSelectMultiAttributes(filterDataObj);
+    }
+
+    embDossier.filterApplyAll();
+  }
+
+  const clearAll = (e) => {
+    setSelected([]);
+    const clone = filters;
+
+    for (const f of clone) {
+      for (const item of f.filterDetail.items) {
+        item.selected = false;
+      }
+    }
+    setFilters(clone);
+    embDossier.filterClearAll();
   }
 
   const populateDossiers = (token) => {
@@ -272,7 +349,8 @@ function App() {
     }).then(function (dossier) {
         // after the Dossier has finished loading...
         // get hook to dossier
-        const embedded_dossier = dossier;
+        let embedded_dossier = dossier;
+        setEmbDossier(embedded_dossier);
 
         // get list of all filters
         embedded_dossier.getFilterList().then(function (filterList) {
@@ -286,6 +364,7 @@ function App() {
               if (itemsfl.selected) {
                 preselected.push({
                   name: itemsfl.name,
+                  value: itemsfl.value,
                   key: fl.filterKey
                 })
               }
@@ -294,7 +373,11 @@ function App() {
           setSelected(preselected);
         });
     });
-  }  
+  }
+
+  const renderSelection = () => {
+    return Boolean(selected.length) && selected.map(s => <Chip key={`${s.key}-${s.name}`} label={s.name} color="secondary" />);
+  }
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -305,14 +388,6 @@ function App() {
       document.body.removeChild(script);
     }
   }, []);
-
-  /*
-  useEffect(() => {
-    if (window.microstrategy) {
-      console.log('Microstrategy lib available');
-    }
-  }, [window.microstrategy]);
-  */
 
   useEffect(() => {
     if (!token) {
@@ -335,15 +410,13 @@ function App() {
         <AppBar position="fixed">
           <Toolbar variant="dense">
             <div className="logo-container">
-              <img className={classes.imageIcon} src="/universal-music-group-logo.png" alt="logo" />   
+              <img className={classes.imageIcon} src="/UMG-logo2.png" alt="logo" />   
             </div>
             <div>
-            <h1>Embedded Dossier</h1>
+            <h1>Royalty Analytics</h1>
             </div>
-            <div>
-                <Avatar className={classes.avatarIcon} variant="circular">
-                    BG
-                </Avatar>
+            <div className="profile">
+                <Avatar className={classes.avatarIcon} variant="circular">BG</Avatar>
             </div>
         </Toolbar>
           
@@ -354,9 +427,13 @@ function App() {
                 
               <div className="attributes-container box">
                 <div className="selected-attributes box">
-                  {Boolean(selected.length) && selected.map(s => <Chip key={`${s.key}-${s.name}`} label={s.name} onDelete={e => handleDelete(s)} color="secondary" />)}
+                  {/* {Boolean(selected.length) && selected.map(s => <Chip key={`${s.key}-${s.name}`} label={s.name} onDelete={e => handleDelete(s)} color="secondary" />)} */}
+                  {renderSelection()}
                 </div>
-                <div className="actions box">Actions</div>
+                <div className="actions box">
+                  {Boolean(selected.length) && <Button component="div" variant="contained" color="secondary" onClick={clearAll}>Clear Filters</Button>}
+                  <Button component="div" variant="contained" onClick={applyFilters}>Apply</Button>
+                </div>
               </div>
               <div className="filter-headers box">
                 <FilterHeaders filters={filters} update={update}/>

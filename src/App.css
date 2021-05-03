@@ -3,14 +3,14 @@
 }
 
 .logo-container {
-  background-color: #FFED94;
-  padding: 10px;
-  border-radius: 10px;
+  /* background-color: #FFED94; */
+  /* padding: 10px; */
+  /* border-radius: 10px; */
 }
 
 .App-body {
   color: white;
-  margin-top: 100px;
+  margin-top: 140px;
   min-height: calc(100vh - 100px);
   /* border: 1px solid salmon; */
   padding: 0 20px;
@@ -95,4 +95,9 @@
   font-weight: 400;
 }
 
+.profile {
+  width: 230px;
+  display: flex;
+  justify-content: flex-end;
+}
 
