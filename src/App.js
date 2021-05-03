@@ -7,10 +7,13 @@ import {
   Avatar,
   Chip,
   Button,
-  Tabs, Tab,
   Toolbar
 } from '@material-ui/core';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
 import FilterHeaders from './components/filterHeaders';
+import useStyles from './components/styles';
 
 // Create your Own theme:
 const theme = createMuiTheme({
@@ -88,20 +91,23 @@ const theme = createMuiTheme({
       root: {
         padding: 4
       }
+    },
+    MuiInputBase: {
+      root: {
+        color: 'inherit',
+        border: '1px solid #FFED94',
+        height: 30,
+        margin: '10px 0'
+      }
+    },
+    MuiOutlinedInput: {
+      root: {
+        borderRadius: 20,
+        margin: '0 10px 10px 10px'
+      }
     }
   },
 });
-
-const useStyles = makeStyles((theme) => ({
-  imageIcon: {
-    height: 110,
-  },
-  avatarIcon: {
-    color: '#FFED94',
-    backgroundColor: '#000',
-    border: '4px solid #FFED94'
-  },
-}));
 
 const config = {
   webserver: 'https://dev-reports.umusic.net',
@@ -146,82 +152,16 @@ const getAuthToken = () => {
   });
 };
 
-const filterData = [
-  {
-    name: 'Genre',
-    selectMultiple: true,
-    items: [
-      {
-        name: 'Alternative',
-        selected: false
-      },
-      {
-        name: 'Brazilian',
-        selected: false
-      },
-      {
-        name: 'Blues',
-        selected: false
-      },
-      {
-        name: 'German Pop',
-        selected: false
-      }
-    ]
-  },
-  {
-    name: 'Listener Country',
-    selectMultiple: true,
-    items: [
-      {
-        name: 'India',
-        selected: false
-      },
-      {
-        name: 'Japan',
-        selected: false
-      },
-      {
-        name: 'Brazil',
-        selected: false
-      },
-      {
-        name: 'France',
-        selected: false
-      }
-    ]
-  },
-  {
-    name: 'Distributor',
-    selectMultiple: true,
-    items: [
-      {
-        name: 'Record Union',
-        selected: false
-      },
-      {
-        name: 'CD Baby',
-        selected: false
-      },
-      {
-        name: 'Ditto',
-        selected: false
-      },
-      {
-        name: 'Finetunes',
-        selected: false
-      }
-    ]
-  },
-];
-
 function App() {
-  const classes = useStyles(theme);
+  const classes = useStyles();
+
   const [selected, setSelected] = useState([]);
   const [token, setToken] = useState();
   const [filters, setFilters] = useState([]);
   const [embDossier, setEmbDossier] = useState();
-
+  const [filterIndexMap, setFilterIndexMap] = useState({});
+  const [isPopupFilterOpen, setIsPopupFilterOpen] = useState(false);
+  
   const update = (modified) => {
     // console.log(modified);
 
@@ -254,18 +194,13 @@ function App() {
         }
       }
     }
+    const filterMap = clone.reduce((acc, filterObj) => {
+        acc[filterObj.filterKey] = filterObj;
+        return acc;
+    }, {})
+
     setFilters(clone);
-
-    let cloneSelections = selected;
-
-    const index = cloneSelections.findIndex(s => s.name === data.name);
-    console.log('remove at index ', index);
-    if (-1 !== index) {
-      console.log(cloneSelections.length);
-      cloneSelections.splice(index, 1);
-      console.log(cloneSelections.length);
-      setSelected(cloneSelections);
-    }
+    update(filterMap);
   }
 
   const applyFilters = (e) => {
@@ -319,9 +254,9 @@ function App() {
       // E.g. is the navigation or collaboration bar displayed, do right-click actions work, etc.
       disableNotification: true,
       filterFeature: {
-          enabled: false,
+          enabled: true,
           edit: true,
-          summary: true
+          summary: false
       },
       dossierFeature: {
           readonly: true
@@ -358,8 +293,11 @@ function App() {
           setFilters(filterList);
 
           const preselected = [];
-
+          let counter = 0;
+          const map = {};
           for(const fl of filterList) {
+            map[fl.filterKey] = counter;
+            counter += 1;
             for (const itemsfl of fl.filterDetail.items) {
               if (itemsfl.selected) {
                 preselected.push({
@@ -370,13 +308,10 @@ function App() {
               }
             }
           }
+          setFilterIndexMap(map);
           setSelected(preselected);
         });
     });
-  }
-
-  const renderSelection = () => {
-    return Boolean(selected.length) && selected.map(s => <Chip key={`${s.key}-${s.name}`} label={s.name} color="secondary" />);
   }
 
   useEffect(() => {
@@ -424,23 +359,27 @@ function App() {
             <div className="filter box">
               <div className="attributes-container box">
                 <div className="selected-attributes box">
-                  {/* {Boolean(selected.length) && selected.map(s => <Chip key={`${s.key}-${s.name}`} label={s.name} onDelete={e => handleDelete(s)} color="secondary" />)} */}
-                  {renderSelection()}
+                  {Boolean(selected.length) && selected.map(s => (
+                    <Chip key={`${s.key}-${s.name}`} label={s.name} onDelete={e => handleDelete(s)}
+                      classes={{
+                        colorSecondary: classes[`color-${filterIndexMap[s.key]}-bgColor`]
+                      }}
+                      color="secondary" />
+                  ))}
                 </div>
                 <div className="actions box">
                   {Boolean(selected.length) && <Button component="div" variant="contained" color="secondary" onClick={clearAll}>Clear Filters</Button>}
-                  <Button component="div" variant="contained" onClick={applyFilters}>Apply</Button>
+                  <Button component="div" variant="contained" disabled={isPopupFilterOpen} onClick={applyFilters}>Apply</Button>
                 </div>
               </div>
               <div className="filter-headers box">
-                <FilterHeaders filters={filters} update={update}/>
+                <FilterHeaders isOpen={setIsPopupFilterOpen} filters={filters} update={update}/>
               </div>
             </div>
           </div>
         </AppBar>
         <div className="App-body">
           <div className="centered"> 
-            
             <div className="dossier box" id="dossierContainer">
             </div>
           </div>
