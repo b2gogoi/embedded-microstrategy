@@ -319,7 +319,7 @@ function App() {
       // E.g. is the navigation or collaboration bar displayed, do right-click actions work, etc.
       disableNotification: true,
       filterFeature: {
-          enabled: true,
+          enabled: false,
           edit: true,
           summary: true
       },
@@ -418,13 +418,10 @@ function App() {
             <div className="profile">
                 <Avatar className={classes.avatarIcon} variant="circular">BG</Avatar>
             </div>
-        </Toolbar>
-          
-        </AppBar>
-        <div className="App-body">
+          </Toolbar>
+
           <div className="centered"> 
             <div className="filter box">
-                
               <div className="attributes-container box">
                 <div className="selected-attributes box">
                   {/* {Boolean(selected.length) && selected.map(s => <Chip key={`${s.key}-${s.name}`} label={s.name} onDelete={e => handleDelete(s)} color="secondary" />)} */}
@@ -439,6 +436,11 @@ function App() {
                 <FilterHeaders filters={filters} update={update}/>
               </div>
             </div>
+          </div>
+        </AppBar>
+        <div className="App-body">
+          <div className="centered"> 
+            
             <div className="dossier box" id="dossierContainer">
             </div>
           </div>

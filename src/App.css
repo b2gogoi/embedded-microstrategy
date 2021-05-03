@@ -10,8 +10,8 @@
 
 .App-body {
   color: white;
-  margin-top: 140px;
-  min-height: calc(100vh - 100px);
+  margin-top: 230px;
+  min-height: calc(100vh - 300px);
   /* border: 1px solid salmon; */
   padding: 0 20px;
 }
