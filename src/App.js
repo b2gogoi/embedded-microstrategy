@@ -206,29 +206,35 @@ function App() {
   const applyFilters = (e) => {
     console.log('Applying filters', selected);
 
-    const filterKeyMap = selected.reduce((acc, selection) => {
-      if(acc[selection.key]) {
-        acc[selection.key].push(selection);
-      } else {
-        acc[selection.key] = [selection];
+    if (selected.length > 0) {
+      const filterKeyMap = selected.reduce((acc, selection) => {
+        if(acc[selection.key]) {
+          acc[selection.key].push(selection);
+        } else {
+          acc[selection.key] = [selection];
+        }
+        return acc;
+      }, {});
+  
+      // console.log(filterKeyMap);
+  
+      for (const filterKey of Object.keys(filterKeyMap)) {
+        const filterDataObj = {};
+        const filterInfoObj = { key: filterKey};
+        const selectionsObj = filterKeyMap[filterKey].map(selection => ({ value: selection.value}));
+        filterDataObj.selections = selectionsObj;
+        filterDataObj.filterInfo = filterInfoObj;
+        filterDataObj.holdSubmit = true;
+        console.log(filterDataObj);
+        embDossier.filterSelectMultiAttributes(filterDataObj);
       }
-      return acc;
-    }, {});
-
-    // console.log(filterKeyMap);
-
-    for (const filterKey of Object.keys(filterKeyMap)) {
-      const filterDataObj = {};
-      const filterInfoObj = { key: filterKey};
-      const selectionsObj = filterKeyMap[filterKey].map(selection => ({ value: selection.value}));
-      filterDataObj.selections = selectionsObj;
-      filterDataObj.filterInfo = filterInfoObj;
-      filterDataObj.holdSubmit = true;
-      console.log(filterDataObj);
-      embDossier.filterSelectMultiAttributes(filterDataObj);
+  
+      embDossier.filterApplyAll();  
+    } else {
+      embDossier.filterClearAll();
     }
 
-    embDossier.filterApplyAll();
+    
   }
 
   const clearAll = (e) => {
