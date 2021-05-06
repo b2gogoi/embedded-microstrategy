@@ -368,7 +368,7 @@ function App() {
                   {Boolean(selected.length) && selected.map(s => (
                     <Chip key={`${s.key}-${s.name}`} label={s.name} onDelete={e => handleDelete(s)}
                       classes={{
-                        colorSecondary: classes[`color-${filterIndexMap[s.key]}-bgColor`]
+                        colorSecondary: classes[`color-${filterIndexMap[s.key]}-bgColor`],
                       }}
                       color="secondary" />
                   ))}
@@ -379,7 +379,7 @@ function App() {
                 </div>
               </div>
               <div className="filter-headers box">
-                <FilterHeaders isOpen={setIsPopupFilterOpen} filters={filters} update={update}/>
+                <FilterHeaders isOpen={console.log/*setIsPopupFilterOpen*/} filters={filters} update={update}/>
               </div>
             </div>
           </div>

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import clsx from 'clsx';
 import Popover from '@material-ui/core/Popover';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Popper from '@material-ui/core/Popper';
+import Portal from '@material-ui/core/Portal';
 import Checkbox from '@material-ui/core/Checkbox';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -85,9 +88,19 @@ function AttributesSelector({key, items, update}: props) {
         }
     }
 
-    return (<div className="attributes-selector" classes={{
-        colorSecondary: classes[`color-${key}-border`]
+    return (<div style={{
+        // border: `1px solid ${classes[`color-${key}-border`]}`,
+        border: `1px solid #FFED94`,
+        maxHeight: 400,
+        minWidth: 200,
+        overflowY: 'auto',
+        borderRadius: 4,
+        backgroundColor: '#141618',
+        color: '#fff',
+        paddingTop: 20,
+        textAlign: 'left',
       }}>
+          {/* /className="attributes-selector"  */}
         {items.length > 10 && <OutlinedInput color="primary"
             value={searchValue}
             placeholder='type 3 chars to search'
@@ -115,9 +128,9 @@ function AttributesSelector({key, items, update}: props) {
 function FHeader({filterKey, name, items, update, isOpen}: props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const handleClose = () => {
-        setAnchorEl(null);
+        // setAnchorEl(null);
         console.log('filter closed');
-        isOpen(false);
+        // isOpen(false);
     };
 
     const open = Boolean(anchorEl);
@@ -141,11 +154,31 @@ function FHeader({filterKey, name, items, update, isOpen}: props) {
         update(filterSelections);
     }
 
+    const handleClick = (e) => {
+        setAnchorEl(e.currentTarget);
+      };
+    
+      const handleClickAway = () => {
+        setAnchorEl(null);
+      };
+
     return (<>
-        <div className="col-header" onClick={showPopupFilters}>
+    <ClickAwayListener onClickAway={handleClickAway}>
+      <div>
+        <div className="col-header" onClick={handleClick}>
             {name}
         </div>
-        <Popover
+        {open ? (
+            <Popper id={id} open={open} anchorEl={anchorEl} disablePortal={true}>
+                <AttributesSelector items={items} update={selectionUpdated} name={name} fkey={filterKey} />
+            </Popper>
+        ) : null}
+      </div>
+    </ClickAwayListener>
+        {/* <ClickAwayListener onClickAway={handleClose}>
+
+         */}
+        {/* <Popover
             id={id}
             open={open}
             anchorEl={anchorEl}
@@ -158,10 +191,12 @@ function FHeader({filterKey, name, items, update, isOpen}: props) {
                 vertical: 'top',
                 horizontal: 'center',
             }}
-        > 
-        {/* <Popper id={id} open={open} anchorEl={anchorEl}> */}
-            <AttributesSelector items={items} update={selectionUpdated} name={name} key={filterKey} />
-        {/* </Popper> */}
-        </Popover>
+        >  */}
+        
+        {/* <Popper id={id} open={open} anchorEl={anchorEl} disablePortal={true}>
+            <AttributesSelector items={items} update={selectionUpdated} name={name} fkey={filterKey} />
+        </Popper> */}
+        {/* </Popover> */}
+        {/* </ClickAwayListener> */}
     </>);
 }
