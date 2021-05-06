@@ -62,7 +62,8 @@ function AttributesSelector({key, items, update}: props) {
         setSearchValue(search)
 
         if (search && Boolean(search.trim().length)) {
-            return items.filter(item => item.name.toLowerCase().startsWith(search.toLowerCase()));
+
+            return items.filter(item => item.name.toLowerCase().includes(search.toLowerCase()));
             
         } else {
             console.log('Search people empty : ', search);
@@ -73,10 +74,11 @@ function AttributesSelector({key, items, update}: props) {
     const searchMate = (e) => {
         const partial = e.target.value;
         setSearchValue(partial);
-
+        
         if (partial) {
-            console.log(partial);
-            setAttributes(filterAttributes(partial));
+            if (partial.length > 2) {
+                setAttributes(filterAttributes(partial));
+            }
         } else {
             setSearchValue('');
             setAttributes(items);
@@ -88,6 +90,7 @@ function AttributesSelector({key, items, update}: props) {
       }}>
         {items.length > 10 && <OutlinedInput color="primary"
             value={searchValue}
+            placeholder='type 3 chars to search'
             size="small"
             onChange={searchMate}
             startAdornment={<InputAdornment position="start"><SearchOutlinedIcon /> </InputAdornment>}
