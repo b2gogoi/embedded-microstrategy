@@ -13,6 +13,7 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import FilterHeaders from './components/filterHeaders';
 import useStyles from './components/styles';
@@ -189,6 +190,7 @@ function App() {
   const [embDossier, setEmbDossier] = useState();
   const [filterIndexMap, setFilterIndexMap] = useState({});
   const [isPopupFilterOpen, setIsPopupFilterOpen] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   
   const update = (modified) => {
     // console.log(modified);
@@ -301,6 +303,7 @@ function App() {
   }
 
   const createDocumentInstance = () => {
+    setIsDownloading(true);
     console.log('createDocumentInstance : ', token);
     const options = getOptions(token);
     console.log(baseRestURL + '/api/documents');
@@ -316,6 +319,7 @@ function App() {
       console.log(response.url);
       response.json().then((json) => {
         console.log(json);
+        
         exportPDF(json.mid);
       });
     }).catch((error) => {
@@ -330,7 +334,7 @@ function App() {
     return fetch(`${baseRestURL}/api/documents/${config.dossierID}/instances/${mid}/pdf`, options).then((response) => {
       response.json().then((json) => {
         console.log(json);
-
+        setIsDownloading(false);
         async function createPDF(json) {
           // create a download anchor tag
           var downloadLink      = document.createElement('a');
@@ -497,9 +501,10 @@ function App() {
                   {Boolean(selected.length) && <Button component="div" variant="contained" color="secondary" onClick={clearAll}>Clear Filters</Button>}
                   <div className="action-combo">
                     <Button component="div" variant="contained" disabled={isPopupFilterOpen} onClick={applyFilters}>Apply</Button>
+                    {isDownloading? <IconButton><CircularProgress color="secondary" /></IconButton>: 
                     <IconButton onClick={e => createDocumentInstance()}>
                       <CloudDownloadIcon color="secondary"/>
-                    </IconButton>
+                    </IconButton>}
                   </div>
                 </div>
               </div>
