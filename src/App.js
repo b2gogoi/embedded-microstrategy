@@ -12,6 +12,8 @@ import {
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import IconButton from '@material-ui/core/IconButton';
 import FilterHeaders from './components/filterHeaders';
 import useStyles from './components/styles';
 
@@ -135,6 +137,32 @@ const loginOptions = {
   })
 };
 
+const getProjectsOptions = (token) => {
+  return {
+    method: 'GET',
+    credentials: 'include', //include cookie
+    mode: 'cors', //set as CORS mode for cross origin resource sharing
+    headers: { 
+      'Content-Type': 'application/json',
+      'X-MSTR-AuthToken': token,
+    }
+  };
+};
+
+const getOptions = (token) => {
+  return {
+    method: 'POST',
+    credentials: 'include', //include cookie
+    mode: 'cors', //set as CORS mode for cross origin resource sharing
+    headers: { 
+      'Content-Type': 'application/json',
+      'X-MSTR-AuthToken': token,
+      'X-MSTR-ProjectID': config.projectID,
+      'Accept': 'application/json'
+    }
+  };
+};
+
 const getAuthToken = () => {
   return fetch(baseRestURL + '/api/auth/login', loginOptions).then((response) => {
       if (response.ok) {
@@ -250,6 +278,97 @@ function App() {
     embDossier.filterClearAll();
   }
 
+  const getProjects = () => {
+    console.log('getProjects : ', token);
+    const options = getProjectsOptions(token);
+    console.log(baseRestURL + '/api/projects');
+    console.log(options);
+
+    return fetch(baseRestURL + '/api/projects', options).then((response) => {
+      console.log(response.headers.get('Content-Type'));
+      console.log(response.headers.get('Date'));
+
+      console.log(response.status);
+      console.log(response.statusText);
+      console.log(response.type);
+      console.log(response.url);
+      response.json().then((json) => {
+        console.log(json);
+      });
+    }).catch((error) => {
+        console.log(error);
+    });
+  }
+
+  const createDocumentInstance = () => {
+    console.log('createDocumentInstance : ', token);
+    const options = getOptions(token);
+    console.log(baseRestURL + '/api/documents');
+    console.log(options);
+
+    return fetch(`${baseRestURL}/api/documents/${config.dossierID}/instances`, options).then((response) => {
+      console.log(response.headers.get('Content-Type'));
+      console.log(response.headers.get('Date'));
+
+      console.log(response.status);
+      console.log(response.statusText);
+      console.log(response.type);
+      console.log(response.url);
+      response.json().then((json) => {
+        console.log(json);
+        exportPDF(json.mid);
+      });
+    }).catch((error) => {
+        console.log(error);
+    });
+  }
+
+  const exportPDF = (mid) => {
+    console.log('exportPDF : ', mid);
+    const options = getOptions(token);
+
+    return fetch(`${baseRestURL}/api/documents/${config.dossierID}/instances/${mid}/pdf`, options).then((response) => {
+      response.json().then((json) => {
+        console.log(json);
+
+        async function createPDF(json) {
+          // create a download anchor tag
+          var downloadLink      = document.createElement('a');
+          downloadLink.target   = '_blank';
+          downloadLink.download = 'RoyaltyAnalytics.pdf';
+
+          const base64Response = await fetch(`data:application/pdf;base64,${json.data}`);
+
+          // convert downloaded data to a Blob
+          // var blob = new Blob([], { type: 'application/pdf' });
+          const blob = await base64Response.blob();
+
+          // create an object URL from the Blob
+          var URL = window.URL || window.webkitURL;
+          var downloadUrl = URL.createObjectURL(blob);
+
+          // set object URL as the anchor's href
+          downloadLink.href = downloadUrl;
+
+          // append the anchor to document body
+          document.body.append(downloadLink);
+
+          // fire a click event on the anchor
+          downloadLink.click();
+
+          // cleanup: remove element and revoke object URL
+          document.body.removeChild(downloadLink);
+          URL.revokeObjectURL(downloadUrl);
+        }
+
+        createPDF(json);
+        
+      });
+    }).catch((error) => {
+        console.log(error);
+    });
+  }
+
   const populateDossiers = (token) => {
     window.microstrategy.dossier.create({
       // This is the document's <div> container where the Dossier should be placed.
@@ -334,7 +453,8 @@ function App() {
     if (!token) {
       // console.log('Token is missing');
       getAuthToken().then((tkn) => {
-        // console.log('got token: ' + tkn);
+        console.log('got token: ' + tkn);
+        // getProjects(tkn);
         setToken(tkn);
       }).catch((error) => {
           console.log(error);
@@ -375,7 +495,12 @@ function App() {
                 </div>
                 <div className="actions box">
                   {Boolean(selected.length) && <Button component="div" variant="contained" color="secondary" onClick={clearAll}>Clear Filters</Button>}
-                  <Button component="div" variant="contained" disabled={isPopupFilterOpen} onClick={applyFilters}>Apply</Button>
+                  <div className="action-combo">
+                    <Button component="div" variant="contained" disabled={isPopupFilterOpen} onClick={applyFilters}>Apply</Button>
+                    <IconButton onClick={e => createDocumentInstance()}>
+                      <CloudDownloadIcon color="secondary"/>
+                    </IconButton>
+                  </div>
                 </div>
               </div>
               <div className="filter-headers box">
