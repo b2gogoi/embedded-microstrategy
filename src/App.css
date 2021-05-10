@@ -26,9 +26,9 @@
   border: 1px solid salmon;
 } */
 
-/* .dossier {
-  border: 1px solid salmon;
-} */
+.dossier {
+  height: 5000px !important;
+}
 
 .attributes-container {
   display: flex;
