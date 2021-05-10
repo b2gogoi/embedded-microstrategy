@@ -11,7 +11,7 @@
 .App-body {
   color: white;
   margin-top: 230px;
-  min-height: 5000px;
+  min-height: 1500px;
   /* min-height: calc(100vh - 300px); */
   /* border: 1px solid salmon; */
   padding: 0 20px;
@@ -27,7 +27,7 @@
 } */
 
 .dossier {
-  height: 5000px !important;
+  height: 1500px !important;
 }
 
 .attributes-container {
