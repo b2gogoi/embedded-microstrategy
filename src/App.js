@@ -160,7 +160,10 @@ const getOptions = (token) => {
       'X-MSTR-AuthToken': token,
       'X-MSTR-ProjectID': config.projectID,
       'Accept': 'application/json'
-    }
+    },
+    body: JSON.stringify({
+      "includeDetailedPages": false,
+    })
   };
 };
 
@@ -263,8 +266,6 @@ function App() {
     } else {
       embDossier.filterClearAll();
     }
-
-    
   }
 
   const clearAll = (e) => {
@@ -305,8 +306,63 @@ function App() {
   const createDocumentInstance = () => {
     setIsDownloading(true);
     console.log('createDocumentInstance : ', token);
-    const options = getOptions(token);
+    // const options = getOptions(token);
     console.log(baseRestURL + '/api/documents');
+
+    const bodyFilters = () => {
+      const filters = []
+
+      if (selected.length > 0) {
+        const filterKeyMap = selected.reduce((acc, selection) => {
+          if(acc[selection.key]) {
+            acc[selection.key].push(selection);
+          } else {
+            acc[selection.key] = [selection];
+          }
+          return acc;
+        }, {});
+        
+        for (const filterKey of Object.keys(filterKeyMap)) {
+          const filterDataObj = { key: filterKey};
+          const selectionsObj = filterKeyMap[filterKey].map(selection => ({ id: selection.value, name: selection.name}));
+          filterDataObj.selections = selectionsObj;
+          filters.push(filterDataObj);  
+        }
+
+        console.log(filters);
+        return { filters };
+    
+      } else {
+        return {};
+      }
+    };
+
+    const options = {
+      method: 'POST',
+      credentials: 'include', //include cookie
+      mode: 'cors', //set as CORS mode for cross origin resource sharing
+      headers: { 
+        'Content-Type': 'application/json',
+        'X-MSTR-AuthToken': token,
+        'X-MSTR-ProjectID': config.projectID,
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(bodyFilters()/* {
+          "filters": [
+              {
+                  "key": "WC6539D78A8AA49BC9EEE2AF41D6791DD",
+                  "name": "Artist Name",
+                  "selections": [
+                      {
+                          "id":"hAriana Grande;848EFF174FD3AFD22A3B29827E57574C",
+                          "name": "Ariana Grande"
+                      }
+                  ]
+              }
+          ]
+      } */)
+    };
+    
     console.log(options);
 
     return fetch(`${baseRestURL}/api/documents/${config.dossierID}/instances`, options).then((response) => {
@@ -418,6 +474,7 @@ function App() {
 
         // get list of all filters
         embedded_dossier.getFilterList().then(function (filterList) {
+          console.log(filterList);
           console.log('filterList', filterList);
           setFilters(filterList);
 
