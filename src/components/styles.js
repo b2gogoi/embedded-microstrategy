@@ -34,10 +34,13 @@ export default makeStyles(() => (
       height: 110,
       },
       avatarIcon: {
-        color: '#FFED94',
+        // color: '#FFED94',
         backgroundColor: '#000',
-        border: '4px solid #FFED94'
+        border: '4px solid #FFED94',
+        color: 'aqua',
+        fontSize: '1rem'
       }
+      
     }, ...createClasses()
   }
 ));
