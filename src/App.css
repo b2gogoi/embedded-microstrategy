@@ -105,6 +105,8 @@
   width: 230px;
   display: flex;
   justify-content: flex-end;
+  align-self: end;
+  margin-top: 10px;
 }
 
 .header {
@@ -128,6 +130,10 @@
   font-weight: 600;
   font-size: 16px;
   color: #FFED94;
+}
+
+.header > div.selected > img {
+  height: 28px ;
 }
 
 .header > div > img {
