@@ -36,6 +36,7 @@ const theme = createMuiTheme({
   },
   typography: {
     fontFamily: [
+      'DIN OT',
       'Poppins',
       'Roboto',
       'Arial',

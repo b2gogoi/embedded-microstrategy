@@ -1,5 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './fonts/DINOT/DINOT.ttf';
+import './fonts/DINOT/DINOT-Black.ttf';
+import './fonts/DINOT/DINOT-Bold.ttf';
+import './fonts/DINOT/DINOT-Medium.ttf';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
