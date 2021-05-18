@@ -2,7 +2,7 @@
   font-family: "DIN OT";
   src: local("DINOT"),
    url("./fonts/DINOT/DINOT.ttf") format("truetype");
-  font-weight: bold;
+  font-weight: regular;
  }
 
 body {

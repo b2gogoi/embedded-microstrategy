@@ -536,7 +536,20 @@ function App() {
               <img className={classes.imageIcon} src="/UMG-logo2.png" alt="logo" />   
             </div>
             <div>
-            <h1>Royalty Analytics</h1>
+            <div className="header">
+              <div>
+                <img src="/dashboard.svg"/>
+                <span>Dashboard</span>
+              </div>
+              <div className="selected">
+                <img src="/analytics.svg"/>
+                <span>Analytics</span>
+              </div>
+              <div><img src="/statements.svg"/>
+              <span>Statements</span></div>
+              <div><img src="/payments.svg"/><span>Payments</span></div>
+              <div><img src="/pipeline.svg"/>Pipeline</div>
+            </div>
             </div>
             <div className="profile">
                 <Avatar className={classes.avatarIcon} variant="circular">BG</Avatar>
