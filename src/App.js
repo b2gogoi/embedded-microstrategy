@@ -27,7 +27,7 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: '#02C486',
-      contrastText: '#E5E5E5'
+      contrastText: '#FFF'
     },
     warning: {
       main: '#9a0036',
@@ -68,9 +68,9 @@ const theme = createMuiTheme({
       }
     },
     MuiCheckbox: {
-      root: {
+      /* root: {
         color: '#FFED94'
-      }
+      } */
     },
     MuiChip: {
       root: {
@@ -79,7 +79,7 @@ const theme = createMuiTheme({
     },
     MuiButton: {
       root: {
-        minWidth: 100,
+        minWidth: 140,
         textTransform: 'uppercase',
         padding: '4px 0px',
         fontSize: '14px',
@@ -101,7 +101,8 @@ const theme = createMuiTheme({
       },
       containedSecondary: {
         color: '#fff',
-        backgroundColor: '#9a0036'
+        backgroundColor: '#9a0036',
+        border: 'none',
       }
     },
     PrivateSwitchBase: {
@@ -112,15 +113,17 @@ const theme = createMuiTheme({
     MuiInputBase: {
       root: {
         color: 'inherit',
-        border: '1px solid #FFED94',
+        border: '0px solid #C0C2C5',
         height: 30,
-        margin: '10px 0'
+        margin: '10px 0',
+        background: '#FCFCFC'
       }
     },
     MuiOutlinedInput: {
       root: {
-        borderRadius: 20,
-        margin: '0 10px 10px 10px'
+        borderRadius: 4,
+        margin: '0 10px 10px 10px',
+        boxSizing: 'border-box'
       }
     }
   },
@@ -536,10 +539,16 @@ function App() {
       });
     } else {
       if (window.microstrategy) {
+        console.log('populateDossiers ', token);
         populateDossiers(token);
+      } else {
+        setTimeout(() => {
+          console.log('2nd populateDossiers ', token);
+          populateDossiers(token);
+        }, 2000)
       }
     }
-  }, [token, window.microstrategy]);
+  }, [token]);
   
   return (
     <MuiThemeProvider theme={theme}>
@@ -584,7 +593,10 @@ function App() {
                   ))}
                 </div>
                 <div className="actions box">
-                  {Boolean(selected.length) && <Button component="div" variant="contained" color="secondary" onClick={clearAll}>Clear Filters</Button>}
+                  
+                  {Boolean(selected.length) && <div className="action-combo">
+                    <Button component="div" variant="contained" color="secondary" onClick={clearAll}>Clear Filters</Button>
+                  </div>}
                   <div className="action-combo">
                     <Button component="div" variant="contained" disabled={isPopupFilterOpen} onClick={applyFilters}>Apply</Button>
                     {isDownloading? <IconButton><CircularProgress color="secondary" /></IconButton>: 

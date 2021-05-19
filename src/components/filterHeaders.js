@@ -90,15 +90,17 @@ function AttributesSelector({key, items, update}: props) {
 
     return (<div style={{
         // border: `1px solid ${classes[`color-${key}-border`]}`,
-        border: `1px solid #FFED94`,
+        // border: `1px solid #FFED94`,
+        marginTop: 20,
         maxHeight: 400,
         minWidth: 200,
         overflowY: 'auto',
-        borderRadius: 4,
-        backgroundColor: '#E5E5E5',
+        borderRadius: 8,
+        backgroundColor: '#FFFFFF',
         color: '#989CA0',
         paddingTop: 20,
         textAlign: 'left',
+        boxShadow: '5px 5px 6px rgba(0, 0, 0, 0.15)',
       }}>
           {/* /className="attributes-selector"  */}
         {items.length > 10 && <OutlinedInput color="primary"
