@@ -31,14 +31,14 @@ export default makeStyles(() => (
   {
     ...{
       imageIcon: {
-      height: 110,
+        height: 60,
       },
       avatarIcon: {
         // color: '#FFED94',
-        backgroundColor: '#E5E5E5',
-        border: '4px solid #FFED94',
-        color: 'aqua',
-        fontSize: '1rem'
+        backgroundColor: '#02C486',
+        // border: '4px solid #FFED94',
+        // color: 'aqua',
+        fontSize: '18px',
       }
       
     }, ...createClasses()

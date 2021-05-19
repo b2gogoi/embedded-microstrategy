@@ -37,8 +37,6 @@ const theme = createMuiTheme({
   typography: {
     fontFamily: [
       'DIN OT',
-      'Poppins',
-      'Roboto',
       'Arial',
       'sans-serif'
     ].join(','),
@@ -64,6 +62,9 @@ const theme = createMuiTheme({
     MuiToolbar: {
       root: {
         justifyContent: 'space-between'
+      },
+      dense: {
+        minHeight: 10,
       }
     },
     MuiCheckbox: {
@@ -79,14 +80,24 @@ const theme = createMuiTheme({
     MuiButton: {
       root: {
         minWidth: 100,
-        textTransform: 'none',
+        textTransform: 'uppercase',
         padding: '4px 0px',
-        fontSize: '1em',
+        fontSize: '14px',
+        fontStyle: 'normal',
+        fontWeight: 'bold',
+        // fontWeight: 500,
+        // lineHeight: '13px',
         margin: '4px',
-        color: '#000',
+        color: '#02C486',
         backgroundColor: '#FFED94',
-        border: '1.5px solid #02C486',
+        border: '2px solid #02C486',
         borderRadius: '25px',
+        letterSpacing: '0.05em',
+      },
+      contained: {
+        color: '#02C486',
+        boxShadow: 'unset',
+        backgroundColor: '#fff',
       },
       containedSecondary: {
         color: '#fff',
@@ -524,9 +535,11 @@ function App() {
           console.log(error);
       });
     } else {
-      populateDossiers(token);
+      if (window.microstrategy) {
+        populateDossiers(token);
+      }
     }
-  }, [token]);
+  }, [token, window.microstrategy]);
   
   return (
     <MuiThemeProvider theme={theme}>
