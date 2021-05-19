@@ -84,7 +84,9 @@ const theme = createMuiTheme({
         fontSize: '1em',
         margin: '4px',
         color: '#000',
-        backgroundColor: '#FFED94'
+        backgroundColor: '#FFED94',
+        border: '1.5px solid #02C486',
+        borderRadius: '25px',
       },
       containedSecondary: {
         color: '#fff',
