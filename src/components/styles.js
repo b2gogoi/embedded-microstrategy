@@ -35,7 +35,7 @@ export default makeStyles(() => (
       },
       avatarIcon: {
         // color: '#FFED94',
-        backgroundColor: '#000',
+        backgroundColor: '#E5E5E5',
         border: '4px solid #FFED94',
         color: 'aqua',
         fontSize: '1rem'

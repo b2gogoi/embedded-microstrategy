@@ -22,12 +22,12 @@ import useStyles from './components/styles';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#000',
-      contrastText: '#FFED94'
+      main: '#E5E5E5',
+      contrastText: '#02C486'
     },
     secondary: {
-      main: '#FFED94',
-      contrastText: '#000'
+      main: '#02C486',
+      contrastText: '#E5E5E5'
     },
     warning: {
       main: '#9a0036',
@@ -51,7 +51,7 @@ const theme = createMuiTheme({
     MuiCssBaseline: {
       '@global': {
         body: {
-          backgroundColor: '#000',
+          backgroundColor: '#E5E5E5',
         },
       },
     },
@@ -533,7 +533,7 @@ function App() {
         <AppBar position="fixed">
           <Toolbar variant="dense">
             <div className="logo-container">
-              <img className={classes.imageIcon} src="/UMG-logo2.png" alt="logo" />   
+              <img className={classes.imageIcon} src="/universal-music-group-logo.png" alt="logo" />   
             </div>
             <div>
             <div className="header">

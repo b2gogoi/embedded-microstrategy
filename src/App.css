@@ -64,16 +64,16 @@
   font-weight: 500;
   font-size: 14px;
   cursor: pointer;
-  color: #FFED94;
+  color: #02C486;
 }
 
 .attributes-selector {
   max-height: 400px;
   min-width: 200px;
   overflow-y: auto;
-  border: 1px solid #FFED94;
+  border: 1px solid #02C486;
   border-radius: 4px;
-  background-color: #141618;
+  background-color: #E5E5E5;
   color: #fff;
   padding-top: 20px;
 }
@@ -129,11 +129,11 @@
 .header > div.selected {
   font-weight: 600;
   font-size: 16px;
-  color: #FFED94;
+  color: #404345;
 }
 
 .header > div.selected > img {
-  height: 28px ;
+  height: 26px ;
 }
 
 .header > div > img {
