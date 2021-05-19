@@ -95,8 +95,8 @@ function AttributesSelector({key, items, update}: props) {
         minWidth: 200,
         overflowY: 'auto',
         borderRadius: 4,
-        backgroundColor: '#141618',
-        color: '#fff',
+        backgroundColor: '#E5E5E5',
+        color: '#989CA0',
         paddingTop: 20,
         textAlign: 'left',
       }}>
