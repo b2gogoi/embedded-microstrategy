@@ -75,6 +75,10 @@ const theme = createMuiTheme({
     MuiChip: {
       root: {
         margin: 4,
+        border: '1px solid #02C486',
+        // boxSizing: 'border-box',
+        // borderRadius: '5px',
+        backgroundColor: 'FFFFFF',
       }
     },
     MuiButton: {
@@ -587,11 +591,12 @@ function App() {
               <div className="attributes-container box">
                 <div className="selected-attributes box">
                    {Boolean(selected.length) && selected.map(s => (
-                    <Chip key={`${s.key}-${s.name}`} label={<><label style={{fontSize: 'small'}}>{s.filterName}</label>: <span style={{fontSize: 'large', fontWeight: 'bold'}}>{s.name}</span></>} onDelete={e => handleDelete(s)}
-                      classes={{
-                        colorSecondary: classes[`color-${filterIndexMap[s.key]}-bgColor`],
-                      }}
-                      color="secondary" />
+                    <Chip key={`${s.key}-${s.name}`} label={<><label style={{fontSize: '12px',lineHeight: '15px',color: '#989CA0'}}>{s.filterName}</label>: <span style={{fontSize: '14px', fontWeight: 'normal',lineHeight: '18px',color: '#141618'}}>{s.name}</span></>} onDelete={e => handleDelete(s)}
+                    //   classes={{
+                    //     colorSecondary: classes[`color-${filterIndexMap[s.key]}-bgColor`],
+                    //   }}
+                    //   color="secondary" 
+                      />
                   ))}
                 </div>
                 <div className="actions box">
