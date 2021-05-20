@@ -220,6 +220,7 @@ function App() {
       const sel = modified[key].filterDetail.items.filter(item => item.selected).map(item => ({
         name: item.name,
         value: item.value,
+        filterName: modified[key].filterName,
         key
       }));
 
@@ -506,7 +507,8 @@ function App() {
                 preselected.push({
                   name: itemsfl.name,
                   value: itemsfl.value,
-                  key: fl.filterKey
+                  key: fl.filterKey,
+                  filterName: fl.filterName
                 })
               }
             }
@@ -584,8 +586,8 @@ function App() {
             <div className="filter box">
               <div className="attributes-container box">
                 <div className="selected-attributes box">
-                  {Boolean(selected.length) && selected.map(s => (
-                    <Chip key={`${s.key}-${s.name}`} label={s.name} onDelete={e => handleDelete(s)}
+                   {Boolean(selected.length) && selected.map(s => (
+                    <Chip key={`${s.key}-${s.name}`} label={<><label style={{fontSize: 'small'}}>{s.filterName}</label>: <span style={{fontSize: 'large', fontWeight: 'bold'}}>{s.name}</span></>} onDelete={e => handleDelete(s)}
                       classes={{
                         colorSecondary: classes[`color-${filterIndexMap[s.key]}-bgColor`],
                       }}
