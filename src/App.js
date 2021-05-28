@@ -132,7 +132,7 @@ const theme = createMuiTheme({
 const config = {
   webserver: 'https://dev-reports.umusic.net',
   projectID: '9F6387B5461149B8B8EBC0B160B3BAFD',
-  dossierID: '33A5DAB84733B12111B15CA2BBCC88C5',
+  dossierID: '67ADCACC47C586AD5DE95B9E261CBC06',
   username: 'Administrator',
   password: 'asdf&890'
 }
@@ -147,7 +147,7 @@ const loginOptions = {
   mode: 'cors', //set as CORS mode for cross origin resource sharing
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
-      "loginMode": 1, // 
+      "loginMode": 1, //
       // "loginMode": 1, // standard login mode
       // // "loginMode": 8, // Login as guest user
       "username": config.username,
@@ -160,7 +160,7 @@ const getProjectsOptions = (token) => {
     method: 'GET',
     credentials: 'include', //include cookie
     mode: 'cors', //set as CORS mode for cross origin resource sharing
-    headers: { 
+    headers: {
       'Content-Type': 'application/json',
       'X-MSTR-AuthToken': token,
     }
@@ -172,7 +172,7 @@ const getOptions = (token) => {
     method: 'POST',
     credentials: 'include', //include cookie
     mode: 'cors', //set as CORS mode for cross origin resource sharing
-    headers: { 
+    headers: {
       'Content-Type': 'application/json',
       'X-MSTR-AuthToken': token,
       'X-MSTR-ProjectID': config.projectID,
@@ -211,7 +211,7 @@ function App() {
   const [filterIndexMap, setFilterIndexMap] = useState({});
   const [isPopupFilterOpen, setIsPopupFilterOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
-  
+
   const update = (modified) => {
     // console.log(modified);
 
@@ -266,9 +266,9 @@ function App() {
         }
         return acc;
       }, {});
-  
+
       // console.log(filterKeyMap);
-  
+
       for (const filterKey of Object.keys(filterKeyMap)) {
         const filterDataObj = {};
         const filterInfoObj = { key: filterKey};
@@ -279,8 +279,8 @@ function App() {
         console.log(filterDataObj);
         embDossier.filterSelectMultiAttributes(filterDataObj);
       }
-  
-      embDossier.filterApplyAll();  
+
+      embDossier.filterApplyAll();
     } else {
       embDossier.filterClearAll();
     }
@@ -339,17 +339,17 @@ function App() {
           }
           return acc;
         }, {});
-        
+
         for (const filterKey of Object.keys(filterKeyMap)) {
           const filterDataObj = { key: filterKey};
           const selectionsObj = filterKeyMap[filterKey].map(selection => ({ id: selection.value, name: selection.name}));
           filterDataObj.selections = selectionsObj;
-          filters.push(filterDataObj);  
+          filters.push(filterDataObj);
         }
 
         console.log(filters);
         return { filters };
-    
+
       } else {
         return {};
       }
@@ -359,7 +359,7 @@ function App() {
       method: 'POST',
       credentials: 'include', //include cookie
       mode: 'cors', //set as CORS mode for cross origin resource sharing
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'X-MSTR-AuthToken': token,
         'X-MSTR-ProjectID': config.projectID,
@@ -380,7 +380,7 @@ function App() {
           ]
       } */)
     };
-    
+
     console.log(options);
 
     return fetch(`${baseRestURL}/api/documents/${config.dossierID}/instances`, options).then((response) => {
@@ -393,7 +393,7 @@ function App() {
       console.log(response.url);
       response.json().then((json) => {
         console.log(json);
-        
+
         exportPDF(json.mid);
       });
     }).catch((error) => {
@@ -440,7 +440,7 @@ function App() {
         }
 
         createPDF(json);
-        
+
       });
     }).catch((error) => {
         console.log(error);
@@ -551,15 +551,15 @@ function App() {
       }
     }
   }, [token]);
-  
+
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
       <div className="App">
-        <AppBar position="fixed">
+        <AppBar>
           <Toolbar variant="dense">
             <div className="logo-container">
-              <img className={classes.imageIcon} src="/universal-music-group-logo.png" alt="logo" />   
+              <img className={classes.imageIcon} src="/universal-music-group-logo.png" alt="logo" />
             </div>
             <div>
             <div className="header">
@@ -582,7 +582,7 @@ function App() {
             </div>
           </Toolbar>
 
-          <div className="centered"> 
+          <div className="centered">
             <div className="filter box">
               <div className="attributes-container box">
                 <div className="selected-attributes box">
@@ -595,13 +595,13 @@ function App() {
                   ))}
                 </div>
                 <div className="actions box">
-                  
+
                   {Boolean(selected.length) && <div className="action-combo">
                     <Button component="div" variant="contained" color="secondary" onClick={clearAll}>Clear Filters</Button>
                   </div>}
                   <div className="action-combo">
                     <Button component="div" variant="contained" disabled={isPopupFilterOpen} onClick={applyFilters}>Apply</Button>
-                    {isDownloading? <IconButton><CircularProgress color="secondary" /></IconButton>: 
+                    {isDownloading? <IconButton><CircularProgress color="secondary" /></IconButton>:
                     <IconButton onClick={e => createDocumentInstance()}>
                       <CloudDownloadIcon color="secondary"/>
                     </IconButton>}
@@ -615,14 +615,14 @@ function App() {
           </div>
         </AppBar>
         <div className="App-body">
-          <div className="centered"> 
+          <div className="centered">
             <div className="dossier box" id="dossierContainer">
             </div>
           </div>
         </div>
       </div>
     </MuiThemeProvider>
-    
+
   );
 }
 

@@ -31,7 +31,7 @@ export default makeStyles(() => (
   {
     ...{
       imageIcon: {
-        height: 60,
+        height: 50,
       },
       avatarIcon: {
         // color: '#FFED94',
@@ -40,7 +40,7 @@ export default makeStyles(() => (
         // color: 'aqua',
         fontSize: '18px',
       }
-      
+
     }, ...createClasses()
   }
 ));
