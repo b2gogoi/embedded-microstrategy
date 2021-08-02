@@ -137,8 +137,8 @@ const config = {
   webserver: 'https://dev-reports.umusic.net',
   projectID: '9F6387B5461149B8B8EBC0B160B3BAFD',
   dossierID: '67ADCACC47C586AD5DE95B9E261CBC06',
-  username: 'Administrator',
-  password: 'asdf&890'
+  username: 'kiruthiga.natrajan@umusic.com',
+  password: 'Kiruthiga@234'
 }
 
 const baseRestURL = config.webserver + "/MicroStrategyLibrary";
@@ -175,7 +175,7 @@ const getOptions = (token) => {
   return {
     method: 'POST',
     credentials: 'include', //include cookie
-    mode: 'cors', //set as CORS mode for cross origin resource sharing
+    mode: 'no-cors', //set as CORS mode for cross origin resource sharing
     headers: {
       'Content-Type': 'application/json',
       'X-MSTR-AuthToken': token,
